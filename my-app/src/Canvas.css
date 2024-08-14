@@ -65,7 +65,7 @@
     align-items: center;
     justify-content: center;
     position: fixed;
-    z-index: 100;
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
@@ -78,22 +78,14 @@
     background-color: #fff;
     padding: 20px;
     border-radius: 4px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 80%;
     max-width: 500px;
-    width: 100%;
 }
 
 .modal .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.modal .close:hover,
-.modal .close:focus {
-    color: black;
-    text-decoration: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
     cursor: pointer;
 }

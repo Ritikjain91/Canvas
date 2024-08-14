@@ -7,7 +7,7 @@ const Canvas = () => {
     const [cards, setCards] = useState([]);
     const [jsPlumbInstance, setJsPlumbInstance] = useState(null);
     const [isConnecting, setIsConnecting] = useState(false);
-    const [selectedCard, setSelectedCard] = useState(null);
+    const [selectedSourceCard, setSelectedSourceCard] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState('');
 
@@ -36,7 +36,7 @@ const Canvas = () => {
     const addCard = () => {
         const newCard = {
             id: `card-${cards.length + 1}`,
-            text: `This is some dummy text for card ${cards.length + 1}. Here you can add more details that can be shown in the modal.`,
+            text: `This is some dummy text for card ${cards.length + 1}. Here i can add more details that can be shown in the modal.`,
             x: 100 + cards.length * 20,
             y: 100 + cards.length * 20,
         };
@@ -50,7 +50,7 @@ const Canvas = () => {
                 if (cardElement) {
                     jsPlumbInstance.draggable(cardElement, { grid: [20, 20] });
 
-                   
+                  
                     jsPlumbInstance.addEndpoint(cardElement, {
                         anchors: ["Top", "Bottom", "Left", "Right"],
                         isSource: true,
@@ -93,26 +93,39 @@ const Canvas = () => {
                             jsPlumbInstance.revalidate(card.id); 
                         });
 
-                    if (isConnecting && selectedCard && selectedCard !== card.id) {
+                    if (isConnecting && selectedSourceCard && selectedSourceCard !== card.id) {
                         jsPlumbInstance.connect({
-                            source: selectedCard,
+                            source: selectedSourceCard,
                             target: card.id,
                             anchors: ["Bottom", "Top"],
                             connector: ["Flowchart", { stub: [40, 60], gap: 10 }],
                             endpoint: "Dot",
                             endpointStyle: { fill: "red", radius: 5 },
                         });
-                        setSelectedCard(null);
+                        setSelectedSourceCard(null);
                         setIsConnecting(false);
                     }
                 }
             });
         }
-    }, [jsPlumbInstance, cards, isConnecting, selectedCard]);
+    }, [jsPlumbInstance, cards, isConnecting, selectedSourceCard]);
 
     const handleCardClick = (cardId) => {
         if (isConnecting) {
-            setSelectedCard(cardId);
+            if (!selectedSourceCard) {
+                setSelectedSourceCard(cardId);
+            } else {
+                jsPlumbInstance.connect({
+                    source: selectedSourceCard,
+                    target: cardId,
+                    anchors: ["Bottom", "Top"],
+                    connector: ["Flowchart", { stub: [40, 60], gap: 10 }],
+                    endpoint: "Dot",
+                    endpointStyle: { fill: "red", radius: 5 },
+                });
+                setSelectedSourceCard(null);
+                setIsConnecting(false);
+            }
         }
     };
 
@@ -122,7 +135,7 @@ const Canvas = () => {
 
     const disableConnectionMode = () => {
         setIsConnecting(false);
-        setSelectedCard(null);
+        setSelectedSourceCard(null);
     };
 
     const handleShowMore = (content) => {
