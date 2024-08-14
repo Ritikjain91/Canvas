@@ -50,7 +50,7 @@ const Canvas = () => {
                 if (cardElement) {
                     jsPlumbInstance.draggable(cardElement, { grid: [20, 20] });
 
-                    // Add endpoints for connecting cards
+                   
                     jsPlumbInstance.addEndpoint(cardElement, {
                         anchors: ["Top", "Bottom", "Left", "Right"],
                         isSource: true,
